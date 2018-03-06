@@ -20,6 +20,14 @@ public class Request {
         return requestPath;
     }
 
+    @Override
+    public String toString() {
+        return "Request{" +
+                "requestMethod='" + requestMethod + '\'' +
+                ", requestPath='" + requestPath + '\'' +
+                '}';
+    }
+
     public Request(String requestMethod, String requestPath) {
         this.requestMethod = requestMethod;
         this.requestPath = requestPath;

@@ -48,6 +48,7 @@ public final class ControllerHelper {
 
     public static Handler getHandler(String requestMethod, String requestPath){
         Request request = new Request(requestMethod, requestPath);
+        System.out.println(HANDLER_MAP.get(request));
         return HANDLER_MAP.get(request);
     }
 

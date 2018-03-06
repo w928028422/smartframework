@@ -19,7 +19,7 @@ public final class PropsUtil {
         InputStream inputStream = null;
         Properties properties = new Properties();
         try {
-            inputStream = ClassUtil.getClassLoader().getResourceAsStream(configFile);
+            inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(configFile);
             properties.load(inputStream);
         } catch (IOException e) {
             LOGGER.error("读取配置文件发生异常", e);

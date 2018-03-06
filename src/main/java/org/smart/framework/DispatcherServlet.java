@@ -41,7 +41,7 @@ public class DispatcherServlet extends HttpServlet{
         jspServlet.addMapping(ConfigHelper.getAppJspPath() + "*");
         //注册处理静态资源的servlet
         ServletRegistration defaultServlet = servletContext.getServletRegistration("default");
-        defaultServlet.addMapping(ConfigHelper.getAppAssetPath() + "*");
+        defaultServlet.addMapping(ConfigHelper.getAppAssetPath() + "*",  "/favicon.ico");
     }
 
     @Override
@@ -82,7 +82,7 @@ public class DispatcherServlet extends HttpServlet{
                 //返回jsp
                 View view = (View) result;
                 String path = view.getPath();
-                if(StringUtils.isNotEmpty(path)){
+                if(StringUtils.isNotBlank(path)){
                     if(path.startsWith("/")){
                         response.sendRedirect(request.getContextPath() + path);
                     }else{

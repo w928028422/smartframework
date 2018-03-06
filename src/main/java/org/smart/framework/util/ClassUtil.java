@@ -25,13 +25,25 @@ public final class ClassUtil {
     }
 
     /**
+     * 获取类路径
+     */
+    public static String getClassPath() {
+        String classpath = "";
+        URL resource = getClassLoader().getResource("");
+        if (resource != null) {
+            classpath = resource.getPath();
+        }
+        return classpath;
+    }
+
+    /**
      * 加载一个类
      */
     public static Class<?> loadClass(String className, boolean isInitialized){
         Class<?> clazz;
         try {
             clazz = Class.forName(className, isInitialized, getClassLoader());
-        } catch (ClassNotFoundException e) {
+        } catch (Exception e) {
             LOGGER.error("加载类时发生错误", e);
             throw new RuntimeException(e);
         }
@@ -89,12 +101,12 @@ public final class ClassUtil {
      */
     private static void addClass(Set<Class<?>> classSet, String packagePath, String packageName) {
         File[] files = new File(packagePath).listFiles(
-                (file) -> file.isFile() || file.isDirectory() || file.getName().endsWith(".class"));
+                (file) -> (file.isFile() && file.getName().endsWith(".class")) || file.isDirectory());
         for (File file : files) {
             String fileName = file.getName();
             if(file.isFile()){
                 String className = fileName.substring(0, fileName.lastIndexOf("."));
-                if(StringUtils.isNotEmpty(className)){
+                if(StringUtils.isNotEmpty(packageName)){
                     className = packageName + "." + className;
                 }
                 doAddClass(classSet, className);
@@ -105,7 +117,7 @@ public final class ClassUtil {
                 }
                 String subPackageName = fileName;
                 if(StringUtils.isNotEmpty(packageName)){
-                    subPackageName = packageName + "." + packagePath;
+                    subPackageName = packageName + "." + subPackageName;
                 }
                 addClass(classSet, subPackagePath, subPackageName);
             }
