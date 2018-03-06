@@ -1,5 +1,6 @@
 package org.smart.framework.bean;
 
+import org.apache.commons.collections4.MapUtils;
 import org.smart.framework.util.CastUtil;
 
 import java.util.Map;
@@ -21,5 +22,9 @@ public class Param {
 
     public long getLong(String name){
         return CastUtil.castLong(paramMap.get(name));
+    }
+
+    public boolean isEmpty(){
+        return MapUtils.isEmpty(paramMap);
     }
 }

@@ -1,5 +1,6 @@
 package org.smart.framework;
 
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.smart.framework.bean.Data;
@@ -76,7 +77,12 @@ public class DispatcherServlet extends HttpServlet{
             }
             Param param = new Param(paramMap);
             Method actionMethod = handler.getActionMethod();
-            Object result = ReflectionUtil.invokeMethod(controllerBean, actionMethod, param);
+            Object result;
+            if (param.isEmpty()){
+                result = ReflectionUtil.invokeMethod(controllerBean, actionMethod);
+            }else {
+                result = ReflectionUtil.invokeMethod(controllerBean, actionMethod, param);
+            }
             //处理Action方法返回值
             if(result instanceof View){
                 //返回jsp
@@ -87,8 +93,10 @@ public class DispatcherServlet extends HttpServlet{
                         response.sendRedirect(request.getContextPath() + path);
                     }else{
                         Map<String, Object> model = view.getModel();
-                        for (Map.Entry<String, Object> entry : model.entrySet()){
-                            request.setAttribute(entry.getKey(), entry.getValue());
+                        if (MapUtils.isNotEmpty(model)) {
+                            for (Map.Entry<String, Object> entry : model.entrySet()) {
+                                request.setAttribute(entry.getKey(), entry.getValue());
+                            }
                         }
                         request.getRequestDispatcher(ConfigHelper.getAppJspPath() + path).forward(request, response);
                     }

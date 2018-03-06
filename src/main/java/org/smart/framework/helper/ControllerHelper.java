@@ -24,7 +24,7 @@ public final class ControllerHelper {
         Set<Class<?>> controllerClassSet = ClassHelper.getControllerClassSet();
         if(CollectionUtil.isNotEmpty(controllerClassSet)){
             for (Class<?> controllerClass : controllerClassSet){
-                Method[] methods = controllerClass.getMethods();
+                Method[] methods = controllerClass.getDeclaredMethods();
                 if(ArrayUtils.isNotEmpty(methods)){
                     for (Method method : methods){
                         RequestMapping action = method.getAnnotation(RequestMapping.class);
@@ -38,6 +38,7 @@ public final class ControllerHelper {
                                 Request request = new Request(requestMethod, requestPath);
                                 Handler handler = new Handler(controllerClass, method);
                                 HANDLER_MAP.put(request, handler);
+                                System.out.println(HANDLER_MAP);
                             }
                         }
                     }
@@ -48,7 +49,6 @@ public final class ControllerHelper {
 
     public static Handler getHandler(String requestMethod, String requestPath){
         Request request = new Request(requestMethod, requestPath);
-        System.out.println(HANDLER_MAP.get(request));
         return HANDLER_MAP.get(request);
     }
 

@@ -31,7 +31,7 @@ public final class ReflectionUtil {
         Object result;
         try {
             method.setAccessible(true);
-            result = method.invoke(object, method, args);
+            result = method.invoke(object, args);
         } catch (Exception e) {
             LOGGER.error("调用方法时发生异常", e);
             throw new RuntimeException(e);
